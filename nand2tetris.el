@@ -59,32 +59,62 @@
 (defcustom nand2tetris-hardware-simulator nil
   "Hardware Simulator Launcher."
   :group 'nand2tetris)
-(defun nand2tetris-hardware-simulator () (or nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" (nand2tetris-tools-dir))))
+(defun nand2tetris-hardware-simulator () (or nand2tetris-hardware-simulator
+                                             (expand-file-name (concat "HardwareSimulator"
+                                                                       (if (eq system-type 'windows-nt)
+                                                                           ".bat"
+                                                                         ".sh"))
+                                                               (nand2tetris-tools-dir))))
 
 (defcustom nand2tetris-assembler nil
   "Assembler Launcher."
   :group 'nand2tetris)
-(defun nand2tetris-assembler nil () (or nand2tetris-assembler nil (expand-file-name "HardwareSimulator.sh" (nand2tetris-tools-dir))))
+(defun nand2tetris-assembler nil () (or nand2tetris-assembler nil
+                                        (expand-file-name (concat "HardwareSimulator"
+                                                                  (if (eq system-type 'windows-nt)
+                                                                      ".bat"
+                                                                    ".sh"))
+                                                          (nand2tetris-tools-dir))))
 
 (defcustom nand2tetris-cpu-emulator nil
   "CPU Emulator Launcher."
   :group 'nand2tetris)
-(defun nand2tetris-cpu-emulator () (or nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" (nand2tetris-tools-dir))))
+(defun nand2tetris-cpu-emulator () (or nand2tetris-cpu-emulator
+                                       (expand-file-name (concat "CPUEmulator"
+                                                                 (if (eq system-type 'windows-nt)
+                                                                     ".bat"
+                                                                   ".sh"))
+                                                         (nand2tetris-tools-dir))))
 
 (defcustom nand2tetris-jack-compiler nil
   "Jack Compiler Launcher."
   :group 'nand2tetris)
-(defun nand2tetris-jack-compiler () (or nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" (nand2tetris-tools-dir))))
+(defun nand2tetris-jack-compiler () (or nand2tetris-jack-compiler
+                                        (expand-file-name (concat "JackCompiler"
+                                                                  (if (eq system-type 'windows-nt)
+                                                                      ".bat"
+                                                                    ".sh"))
+                                                          (nand2tetris-tools-dir))))
 
 (defcustom nand2tetris-text-comparer nil
   "Text Comparer Launcher."
   :group 'nand2tetris)
-(defun nand2tetris-text-comparer () (or nand2tetris-text-comparer (expand-file-name "TextComparer.sh" (nand2tetris-tools-dir))))
+(defun nand2tetris-text-comparer () (or nand2tetris-text-comparer
+                                        (expand-file-name (concat "TextComparer"
+                                                                  (if (eq system-type 'windows-nt)
+                                                                      ".bat"
+                                                                    ".sh"))
+                                                          (nand2tetris-tools-dir))))
 
 (defcustom nand2tetris-vm-emulator nil
   "VM Emulator Launcher."
   :group 'nand2tetris)
-(defun nand2tetris-vm-emulator () (or nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" (nand2tetris-tools-dir))))
+(defun nand2tetris-vm-emulator () (or nand2tetris-vm-emulator
+                                      (expand-file-name (concat "VMEmulator"
+                                                                (if (eq system-type 'windows-nt)
+                                                                    ".bat"
+                                                                  ".sh"))
+                                                        (nand2tetris-tools-dir))))
 
 (defun nand2tetris/hardware-simulator ()
   "Start Hardware Simulator.
@@ -161,13 +191,13 @@ See URL `http://www.nand2tetris.org/software.php'."
    (nand2tetris//get-compare-file (current-buffer))))
 
 (defun nand2tetris/tests-current-hdl ()
-  "Run `HardwareSimulator.sh' on current tst file."
+  "Run `HardwareSimulator.bat' on current tst file."
   (interactive)
   (save-buffer)
   (shell-command (concat (nand2tetris-hardware-simulator) " " (nand2tetris//get-current-test-file))))
 
 (defun nand2tetris/tests-current-hdl-elsewhere ()
-  "Run `HardwareSimulator.sh' on current tst file, but on another locaion.
+  "Run `HardwareSimulator.bat' on current tst file, but in another location.
 So it can use the builtin chips."
   (interactive)
   (let* ((filename          (file-name-base (buffer-file-name)))

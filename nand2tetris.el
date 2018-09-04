@@ -335,9 +335,10 @@ Interactively, prompt for symbol."
        `(,nand2tetris-font-lock-keywords nil nil nil nil)))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist
-             `(,(concat (expand-file-name nand2tetris-core-base-dir) "\.*\\.hdl")
-               . 'nand2tetris-mode))
+(add-to-list 'auto-mode-alist '("\\.hdl\\'" . nand2tetris-mode))
+;(add-to-list 'auto-mode-alist
+;             `(,(concat (expand-file-name nand2tetris-core-base-dir) "\.*\\.hdl")
+;               . 'nand2tetris-mode))
 
 
 (provide 'nand2tetris)

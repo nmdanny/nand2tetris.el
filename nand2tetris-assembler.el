@@ -176,7 +176,7 @@ Borrowed from http://stackoverflow.com/a/20577329"
   (let ((res ""))
     (while (not (= integer 0))
       (setq res (concat (if (= 1 (logand integer 1)) "1" "0") res))
-      (setq integer (lsh integer nand2tetris-assembler-1)))
+      (setq integer (lsh integer -1)))
     (if (string= res "")
         (setq res "0"))
     res))

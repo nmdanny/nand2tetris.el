@@ -340,6 +340,107 @@ Interactively, prompt for symbol."
 ;             `(,(concat (expand-file-name nand2tetris-core-base-dir) "\.*\\.hdl")
 ;               . 'nand2tetris-mode))
 
+;;
+;; Major mode for the high level language Jack
+;; Taken from https://github.com/Juan-Cortez3/emacs-nand2tetris
+;;
+
+;; the following hdl indent-line and syntax-table are used by .jack related functions
+(defun hdl-indent-line ()
+  "Indent current line as HDL code."
+  (interactive)
+  (beginning-of-line)
+  (if (bobp)
+      (indent-line-to 0)
+    (let ((not-indented t) cur-indent)
+      (if (looking-at ".*}")
+          (progn
+            (save-excursion
+              (forward-line -1)
+              (setq cur-indent (- (current-indentation) tab-width)))
+            (if (< cur-indent 0)
+                (setq cur-indent 0)))
+        (save-excursion
+          (while not-indented
+            (forward-line -1)
+            (if (looking-at ".*}")
+                (progn
+                  (setq cur-indent (current-indentation))
+                  (setq not-indented nil))
+              (if (looking-at ".*{")
+                  (progn
+                    (setq cur-indent (+ (current-indentation) tab-width))
+                    (setq not-indented nil))
+                (if (bobp)
+                    (setq not-indented nil)))))))
+      (if cur-indent
+          (indent-line-to cur-indent)
+        (indent-line-to 0)))))
+
+(defvar hdl-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?_ "w" st)
+    (modify-syntax-entry ?/ ". 124b" st)
+    (modify-syntax-entry ?* ". 23" st)
+    (modify-syntax-entry ?\n "> b" st)
+    st)
+  "Syntax table for ‘hdl-mode’.")
+
+(defvar jack-mode-hook nil)
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.jack\\'" . jack-mode))
+
+;; Syntax highlighting
+(defconst jack-font-lock-keywords-1
+  (list
+   '("class\\|\
+constructor\\|\
+method\\|\
+function\\|\
+var\\|\
+static\\|\
+field\\|\
+let\\|\
+do\\|\
+if\\|\
+else\\|\
+while\\|\
+return\\|\
+this" . font-lock-keyword-face))
+  "Highlighting expressions for program components, variable declaration, statements, constant values, object reference")
+
+(defconst jack-font-lock-keywords-2
+  (append jack-font-lock-keywords-1
+          (list
+           '("class[[:blank:]]+\\(\\w+\\)[[:blank:]]+{" 1 font-lock-function-name-face)
+           '("\\(\\w+\\)[[:blank:]]*=[[:blank:]]*" 1 font-lock-variable-name-face)
+           '("[^a-zA-Z0-9]\\(int\\|boolean\\|char\\|void\\)[^a-zA-Z0-9]" 1 font-lock-type-face)
+           '("true\\|false\\|null" . font-lock-constant-face)))
+  "Highlighting expressions for memory access commands and constants.")
+
+(defconst jack-font-lock-keywords-3
+  (append jack-font-lock-keywords-2
+          (list
+           '("[^a-zA-Z0-9]\\(Math\\|String\\|Array\\|Output\\|Screen\\|Keyboard\\|Memory\\|Sys\\)[^a-zA-Z0-9]" 1 font-lock-function-name-face)
+           '("\\(constructor\\|method\\|function\\)[[:blank:]]+\\(\\w+\\)[[:blank:]]+\\(\\w+\\)[[:blank:]]*(" 3 font-lock-constant-face)))
+  "Highlighting expressions for Jack standard libraries.")
+
+(defvar jack-font-lock-keywords jack-font-lock-keywords-3
+  "Defautl highlighting expressions for HDL mode.")
+
+;; The entry function
+(define-derived-mode jack-mode ()
+  "Major mode for editing .jack files"
+  (interactive)
+  (kill-all-local-variables)
+  (set-syntax-table hdl-mode-syntax-table) ;; use old hdl syntax table
+  (set (make-local-variable 'font-lock-defaults) '(jack-font-lock-keywords))
+  (set (make-local-variable 'indent-line-function) 'hdl-indent-line) ;; use old hdl indent rule
+  (setq major-mode 'jack-mode)
+  (setq mode-name "Jack")
+  (run-hooks 'jack-mode-hook))
+
 
 (provide 'nand2tetris)
 ;;; nand2tetris.el ends here

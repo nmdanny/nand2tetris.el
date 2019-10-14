@@ -367,34 +367,6 @@ Interactively, prompt for symbol."
 
 (defvar jack-tab-width 2 "Width of a tab for Jack mode.")
 
-(defvar jack-tools-directory
-  "/home/jackson/architecture/nand2tetris/tools/"
-  "Your nand2tetris tools folder.")
-
-(defvar jack-build-directory
-  "/home/jackson/architecture/jack-resources/libraries/"
-  "Absolute path to your build directory.")
-
-;; Execution.
-(defun jack-execute()
-  "Runs the VMEmulator."
-  (interactive)
-  (call-process-shell-command (concat jack-tools-directory "VMEmulator.sh&") nil 0))
-
-;; Compilation.
-(defun jack-build()
-  "Builds a jack directory."
-  (interactive)
-  (shell-command (format "%s %s"
-                         (concat jack-tools-directory "JackCompiler.sh")
-                         jack-build-directory)))
-
-(defvar jack-mode-map nil "Keymap for jack-mode.")
-(when (not jack-mode-map)
-  (setq jack-mode-map (make-sparse-keymap))
-  (define-key jack-mode-map (kbd "<f5>") 'jack-execute)
-  (define-key jack-mode-map (kbd "<f9>") 'jack-build))
-
 (define-derived-mode jack-mode c-mode "Jack"
   "A major mode to edit Nand2Tetris' .jack files."
 
@@ -404,8 +376,6 @@ Interactively, prompt for symbol."
   ;; Otherwise it gets the default value.
   (when jack-tab-width
     (set (make-local-variable 'tab-width) jack-tab-width))
-
-  (use-local-map jack-mode-map)
 
   (run-hooks 'jack-mode-hook))
 

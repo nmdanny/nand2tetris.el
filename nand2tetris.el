@@ -36,7 +36,6 @@
 ;;; Code:
 (require 'nand2tetris-core)
 (require 'eldoc)
-(require 'yasnippet)
 (require 'rx)
 
 
@@ -245,20 +244,6 @@ Interactively, prompt for symbol."
   (let ((symbol (nand2tetris//get-chip-at-line))
         (enable-recursive-minibuffers t))
     (message (cdr (assoc "spec" (assoc symbol nand2tetris-core-builtin-chips))))))
-
-
-;;; Yasnippet
-(defconst nand2tetris--source-root-dir (file-name-directory (or load-file-name
-                                                     buffer-file-name)))
-;;;###autoload
-(defun nand2tetris//snippets-initialize ()
-  "Initialize snippets directory."
-  (let ((snip-dir (expand-file-name "snippets" nand2tetris--source-root-dir)))
-    (add-to-list 'yas-snippet-dirs snip-dir t)
-    (yas-load-directory snip-dir)))
-
-;;;###autoload
-(eval-after-load 'yasnippet #'(nand2tetris//snippets-initialize))
 
 
 ;;; Indentation

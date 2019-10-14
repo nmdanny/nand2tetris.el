@@ -365,7 +365,7 @@ Interactively, prompt for symbol."
     (,jack-constants-regexp . font-lock-constant-face)
     (,jack-keywords-regexp . font-lock-keyword-face)))
 
-(defvar jack-tab-width 2 "Width of a tab for Jack mode.")
+(defvar jack-tab-width 4 "Width of a tab for Jack mode.")
 
 (define-derived-mode jack-mode c-mode "Jack"
   "A major mode to edit Nand2Tetris' .jack files."

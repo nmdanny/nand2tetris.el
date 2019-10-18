@@ -331,6 +331,9 @@ Interactively, prompt for symbol."
 ;;
 
 
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.jack\\'" . jack-mode))
+
 ;; Define several classes of keywords.
 (defvar jack-types '("int" "boolean" "char" "void" "Math" "String" "Array"
 "Output" "Screen" "Keyboard" "Memory" "Sys"))
